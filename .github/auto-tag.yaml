@@ -20,7 +20,7 @@ jobs:
           WITH_V: true
           DEFAULT_BUMP: patch
           RELEASE_BRANCHES: main
-          CUSTOM_TAG: "custom_tag_here"
+          CUSTOM_TAG: "1.0.3"
 
       - name: Set Maven Project Version
         run: mvn versions:set -DnewVersion=${{ steps.bump_version.outputs.new_version }}
