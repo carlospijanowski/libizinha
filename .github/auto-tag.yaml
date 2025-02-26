@@ -1,0 +1,28 @@
+name: Auto Tag Release
+
+on:
+  push:
+    branches:
+      - main  # Define em quais branches este workflow será acionado
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest  # Define o ambiente de execução
+
+    steps:
+      - uses: actions/checkout@v2  # Faz checkout do código
+
+      - name: Bump version and push tag
+        id: bump_version  # Adicione um ID aqui para referenciar os outputs
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch
+          RELEASE_BRANCHES: main
+          CUSTOM_TAG: "custom_tag_here"
+
+      - name: Set Maven Project Version
+        run: mvn versions:set -DnewVersion=${{ steps.bump_version.outputs.new_version }}
+        env:
+          newVersion: ${{ steps.bump_version.outputs.new_version }}  # Garanta que esta variável esteja sendo passada corretamente
